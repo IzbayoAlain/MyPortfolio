@@ -3,129 +3,161 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog Dashboard</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
+            margin: 20px;
         }
 
-        header {
-            background-color:#D1FFD6;
-            color: #fff;
-            padding: 10px;
-            text-align: center;
-        }
-
-        #dashboard {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            grid-template-rows: repeat(2, 1fr);
-            grid-gap: 20px;
+        form {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
             padding: 20px;
-        }
-
-        .panel {
-            grid-column: span 1;
-            grid-row: span 1;
-            padding: 20px;
-            box-sizing: border-box;
-            border: 1px solid #ddd;
             border-radius: 5px;
-            overflow: hidden;
-            background-color: #D1FFD6;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
-        footer {
-            background-color: #4A8294;
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 16px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #4a8294;
             color: #fff;
-            text-align: center;
             padding: 10px;
-            position: fixed;
-            bottom: 0;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
             width: 100%;
         }
-        nav {
-      background-color: #D1FFD6;
-      padding: 10px 20px ;
-      margin:40px 10px;
-      text-align: center;
-    }
 
-    nav a {
-      color: #fff;
-      text-decoration: none;
-      padding: 10px 20px;
-      margin: 0  9px ;
-      border-radius: 5px;
-      background-color: #777;
-    }
+        button:hover {
+            background-color: #555;
+        }
 
-    nav a:hover {
-      background-color: #4a8294;
-    }
-    @media (max-width: 200px) {
-            body {
-                max-width: 100%;
-            }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .action-buttons button {
+            margin-right: 5px;
+        }
+
+        #blogCounter {
+            margin-top: 20px;
+            font-size: 16px;
+            color: #555;
         }
     </style>
+    <title>Create New Blog</title>
 </head>
 <body>
 
-    <header>
-        <nav>
-    
-            <a href="homepage.html">HOME</a>
-            <a href="skills.html">Skills</a>
-            <a href="about.html">About Us</a>
-            <a href="blogs.html">Blogs</a>
-            <a href="contact.html">Contact Us</a>
-            <a href="login.html">LOGIN</a>
-            <a href="dashboard.html">DASHBOARD</a>
-          </nav>
-        <h1>DASHBOARD</h1>
-    </header>
+    <form id="createBlogForm">
+        <label for="blogTitle">Title:</label>
+        <input type="text" id="blogTitle" name="blogTitle" required>
 
-    <div id="dashboard">
-        <div class="panel">
-            <h2>Accounts Created</h2>
-            <p>Total: 100</p>
-            <ul>
-                <li>Alain - Joined on January 5, 2024</li>
-                <li>Izabayo - Joined on January 8, 2024</li>
-                
-            </ul>
-        </div>
-        <div class="panel">
-            <h2>Accounts Deleted</h2>
-            <p>Total: 10</p>
-        </div>
-        <div class="panel">
-            <h2>Active Accounts</h2>
-            <p>Total: 90</p>
-        </div>
-        <div class="panel">
-            <h2>Blogs Created</h2><p>Total: 100</p>
-        
-        </div>
-        <div class="panel">
-            <h2>Blogs Deleted</h2>
-            <p>Total: 20</p>
-        </div>
-        <div class="panel">
-            <h2>Blogs Controler</h2>
-          Blog 1 - by User A <button onclick="approveBlog(1)">Approve</button> <button onclick="deleteBlog(1)">Delete</button></br></br>
-          Blog 2 - by User B <button onclick="approveBlog(2)">Approve</button> <button onclick="deleteBlog(2)">Delete</button>     
-                
-            </ul>
-        </div>
-    </div>
+        <label for="blogContent">Content:</label>
+        <textarea id="blogContent" name="blogContent" rows="8" required></textarea>
 
-    <footer>
-        <p>&copy; 2024 IANGroup</p>
-    </footer>
+        <label for="blogImage">Upload Photo:</label>
+        <input type="file" id="blogImage" name="blogImage" accept="image/*">
+
+        <button type="button" onclick="createBlog()">Create Blog</button>
+    </form>
+
+    <p id="blogCounter">Blogs Created: <span id="createdBlogs">0</span> | Blogs Deleted: <span id="deletedBlogs">0</span></p>
+
+    <script>
+        var createdCount = 0;
+        var deletedCount = 0;
+
+        function createBlog() {
+            var blogTitle = document.getElementById("blogTitle").value;
+            var blogContent = document.getElementById("blogContent").value;
+
+            if (blogTitle && blogContent) {
+                var table = document.getElementById("itemTable");
+                var row = table.insertRow(-1);
+
+                var cell1 = row.insertCell(0);
+                var cell2 = row.insertCell(1);
+                var cell3 = row.insertCell(2);
+
+                cell1.innerHTML = blogTitle;
+                cell2.innerHTML = blogContent;
+                cell3.innerHTML = '<div class="action-buttons"><button onclick="editItem(this)">Edit</button><button onclick="deleteItem(this)">Delete</button></div>';
+
+                // Increment created count
+                createdCount++;
+                updateCounter();
+
+                // Clear form fields after creating a blog
+                document.getElementById("createBlogForm").reset();
+            }
+        }
+
+        function editItem(button) {
+            var row = button.parentNode.parentNode.parentNode;
+            var blogTitle = row.cells[0].innerHTML;
+            var blogContent = row.cells[1].innerHTML;
+
+            document.getElementById("blogTitle").value = blogTitle;
+            document.getElementById("blogContent").value = blogContent;
+
+            // Remove the edited row
+            row.parentNode.removeChild(row);
+        }
+
+        function deleteItem(button) {
+            var row = button.parentNode.parentNode.parentNode;
+            row.parentNode.removeChild(row);
+
+            // Increment deleted count
+            deletedCount++;
+            updateCounter();
+        }
+
+        function updateCounter() {
+            document.getElementById("createdBlogs").innerText = createdCount;
+            document.getElementById("deletedBlogs").innerText = deletedCount;
+        }
+    </script>
+
+    <table id="itemTable">
+        <tr>
+            <th>Blog Title</th>
+            <th>Blog Content</th>
+            <th>Action</th>
+        </tr>
+    </table>
 
 </body>
 </html>
